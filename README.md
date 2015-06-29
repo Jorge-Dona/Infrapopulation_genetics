@@ -1,2 +1,2 @@
 # Infrapopulation_genetics
-Genetics and statistics tools to work with  symbiont infrapopulations
+Genetics and statistics tools for the study of symbiont infrapopulations
