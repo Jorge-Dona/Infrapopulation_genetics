@@ -7,9 +7,9 @@
 #Preparing data
 
 You need two input files. The alignmentcsv (DNA sequences as characters) and the pop_parameterscsv (Population parameters ordered as alignment-i.e. Column order have to be the same as species order in alignment-)
-You can find two examples files in this same repository; Aligment_example.csv and Pop_par_example.csv
 
-
+You can find two examples files here (https://www.dropbox.com/sh/kctmuslqg57cjwj/AACwSplUtAUnhV9YSjdXJ17ga?dl=0)
+Aligment_example.csv and Pop_par_example.csv
 #Output file
 
 The output.csv includes the results for 100 iterations.
@@ -24,8 +24,12 @@ require (pegas)
 require (dplyr)
 
 ###################################################################################################################
+iteration #The total number of iterations
+alignmentcsv #Input DNA file (see above)
+pop_parameterscsv# Input population parametrs file (see above)
+species# Number of species in the input files
 
-Infrapopgenetics <- function(alignmentcsv, pop_parameterscsv, iteration) {
+Infrapopgenetics <- function(alignmentcsv, pop_parameterscsv, iteration, species) { 
 
   data=read.csv("alignmentcsv") 
   abun=read.csv("pop_parameterscsv") 
@@ -46,9 +50,9 @@ Infrapopgenetics <- function(alignmentcsv, pop_parameterscsv, iteration) {
   q95= numeric()
   max= numeric()
   
-  for (it in 1:iteration){   #The total number of iterations
+  for (it in 1:iteration){   
           
-                    for(i in 1:17)#  The total number of species in the file data
+                    for(i in 1:species)
                       { 
                             
                             a=data.frame(filter(data, sp ==i)) 
@@ -111,8 +115,9 @@ Infrapopgenetics <- function(alignmentcsv, pop_parameterscsv, iteration) {
 
 #Infraglm function
 
-This function calculate one Genearalized linear model over the data generated from the previous simulation (i.e. one per iteration).
-In this example, is wrote for do a Gaussian model (link = "identity") accounting for the differences in sample size (weights option over an n column)
+This function calculate a Genearalized linear model over the data generated from the previous simulation (i.e. one per iteration).
+In this example, is wrote for a Gaussian model (link = "identity") accounting for the differences in sample size (weights option over an n column)
+
 #Input data
 
 data=read.csv("output.csv") #From the previous function
