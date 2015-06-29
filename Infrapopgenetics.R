@@ -107,3 +107,75 @@ Infrapopgenetics <- function(alignmentcsv, pop_parameterscsv, iteration) {
    write.csv(pisp, "output.csv")
    write.csv (aligned, "sequencesused.csv")               
   }
+#################################################################################################################
+
+#Infraglm function
+
+This function calculate one Genearalized linear model over the data generated from the previous simulation (i.e. one per iteration).
+In this example, is wrote for do a Gaussian model (link = "identity") accounting for the differences in sample size (weights option over an n column)
+#Input data
+
+data=read.csv("output.csv") #From the previous function
+*If you are interested in use the weight option of glm, you have to include a column named "n" with the sample size in your data.
+
+#Output data
+
+The output file contains:
+
+iteration:the number of iteration
+pvalue: the model pvalue
+intcp: the intercept
+slp: the slope
+f: the F statistic
+es: the Nagelkerke R2
+df: the degree of freedom
+dev: the deviance explained by the model.
+
+
+Infraglm <- function(input,iteration) {
+
+data=read.csv("input")
+pvalue=numeric()
+intcp=numeric()
+slp=numeric()
+iteration=numeric()
+f=numeric()
+es=numeric()
+df=numeric()
+dev=numeric()
+
+      for (it in 1:iteration){ 
+      
+              sub1 = filter(data, V1==it)
+              sub=as.data.frame(sub1)
+              iteration=c(it,iteration)
+              glm=glm(V3 ~ QUANTILE50, data = sub,  family = gaussian(link = "identity"), weights = n) #PREGUNTAR A ROGER
+              int = coef(glm)[1] 
+              intcp= c(intcp,as.numeric(int))
+              sl = coef(glm)[2]
+              slp= c(slp,as.numeric(sl))
+              pval <- summary(glm)$coef[, "Pr(>|t|)"]
+              pvalmat=as.matrix(pval)
+              pv=pvalmat[2,]
+              pvalue=c(pvalue,pv)
+              deviance=glm$deviance
+              null=glm$null.deviance
+              D2= ((null-deviance)/(null))*100 
+              dev=c(dev,D2)
+              anova=anova(glm,test="F")
+              f1=anova$F[2]
+              f=c(f,f1)
+              df1=anova$"Resid. Df"[2]
+              df=c(df,df1)
+              r2=NagelkerkeR2(glm)
+              es1=r2$R2
+              es=c(es,es1)
+
+             
+                          
+            }  
+  results= cbind(iteration, pvalue, intcp, slp,f,es,df,dev)
+  write.csv(results, "pi_glm_final.csv")
+  
+
+}
