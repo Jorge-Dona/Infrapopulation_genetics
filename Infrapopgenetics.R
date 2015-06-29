@@ -1,7 +1,7 @@
 #################################################Estimating population genetics parameters for infrapopulations#############################################################
 
-#This function allow to simulate 100 (or whatever) sampling scenarios. For example, you have some infrapopulations (i.e. number of symbiont individuals per individual host) with more than one individual sampled and other with only one. Here, in each iteration, only use one individual per infrapopulation. Then, is prepared to calculate Genearalized linear models (Infraglm function) for your variables of interest.
-#Sometimes, could be realistic work with uncertainty in your population parameters (e.g. abundance). This function allows to calculate a new value into a range per iteration. In this example, Minimum, Median, Quartile 95 and Maximun are simulated between the 50% and the 100% of the "real" value.
+This function allow to simulate 100 (or whatever) sampling scenarios. This is a way to use all your data when you have some infrapopulations better sampled than others, by using one individual pear infrapopulation each time thus later you can compare iteration results with general results. For example, you have some infrapopulations (i.e. number of symbiont individuals per individual host) with 5 individuals sampled and other with only one. Here, in each iteration, only one individual is used per infrapopulation. Then, is prepared to calculate Genearalized linear models (see above Infraglm function) for your variables of interest.
+Sometimes, could be realistic work with uncertainty in your population parameters (e.g. abundance). This function allows to calculate a new value into a range per iteration. In this example, Minimum, Median, Quartile 95 and Maximun are simulated between the 50% and the 100% of the "real" value.
 
 
 #Preparing data
@@ -14,7 +14,7 @@ Aligment_example.csv and Pop_par_example.csv
 
 The output.csv includes the results for 100 iterations.
 
-Genetic parameters estimated: Tajima's D, R2, nucleotide diversity (pi), haplotype number and haplotype proportion.
+Genetic parameters estimated: Tajimas D, R2, nucleotide diversity (pi), haplotype number and haplotype proportion.
 Population parameters simulated: Minimum, Median, Quartile 95 and Maximun.
 
 In addition, sequencesused.csv includes all the sequences used in the simulation.
@@ -180,7 +180,7 @@ dev=numeric()
                           
             }  
   results= cbind(iteration, pvalue, intcp, slp,f,es,df,dev)
-  write.csv(results, "pi_glm_final.csv")
+  write.csv(results, "glmresults.csv")
   
 
 }
