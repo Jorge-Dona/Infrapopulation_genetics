@@ -1,33 +1,44 @@
 #################################################Estimating population genetics parameters for infrapopulations#############################################################
 
-This function allow to simulate 100 (or whatever) sampling scenarios. This is a way to use all your data when you have some infrapopulations better sampled than others, by using one individual pear infrapopulation each time thus later you can compare iteration results with general results. For example, you have some infrapopulations (i.e. number of symbiont individuals per individual host) with 5 individuals sampled and other with only one. Here, in each iteration, only one individual is used per infrapopulation. Then, is prepared to calculate Genearalized linear models (see above Infraglm function) for your variables of interest.
-Sometimes, could be realistic work with uncertainty in your population parameters (e.g. abundance). This function allows to calculate a new value into a range per iteration. In this example, Minimum, Median, Quartile 95 and Maximun are simulated between the 50% and the 100% of the "real" value.
+This function allow to simulate 100 (or whatever) sampling scenarios. This is a way to use all your data when you have some infrapopulations (i.e. number of symbiont individuals per individual host) better sampled than others, by using one random individual per infrapopulation each time for iteration calculations. Later you will able to compare iteration with general results. An example, you have some infrapopulations with 5 individuals sampled and other with only one. Here, in each iteration, only one individual is used per infrapopulation (always the same for the infrapopulation with one individual). Then, you can use the "Infraglm function" (see below) to calculate Genearalized linear models for over your variables of interest.
+*In some circumstances, can be realistic work with uncertainty in your variables (e.g. abundance). This function allows to calculate a new value into a range per iteration. In this example, Minimum, Median, Quartile 95 and Maximun are simulated between the 50% and the 100% of the "real" value.
 
 
 #Preparing data
 
-You need two input files. The alignmentcsv (DNA sequences as characters) and the pop_parameterscsv (Population parameters ordered as alignment-i.e. Column order have to be the same as species order in alignment-)
-
-You can find two examples files here (https://www.dropbox.com/sh/kctmuslqg57cjwj/AACwSplUtAUnhV9YSjdXJ17ga?dl=0)
+Take a look over two examples files here (https://www.dropbox.com/sh/kctmuslqg57cjwj/AACwSplUtAUnhV9YSjdXJ17ga?dl=0)
 Aligment_example.csv and Pop_par_example.csv
+
+The alignmentcsv (DNA sequences as characters) and the pop_parameterscsv (Population parameters ordered as alignment-i.e. Raw order have to be the same as species order in alignment-)
+
+
 #Output file
 
 The output.csv includes the results for 100 iterations.
 
+In this example:
+
 Genetic parameters estimated: Tajimas D, R2, nucleotide diversity (pi), haplotype number and haplotype proportion.
 Population parameters simulated: Minimum, Median, Quartile 95 and Maximun.
 
-In addition, sequencesused.csv includes all the sequences used in the simulation.
+In addition, sequencesused.csv include all the sequences used in the simulation.
+
+
+###################################################################################################################
 
 require (ape) 
 require (pegas)
 require (dplyr)
+##
 
-###################################################################################################################
+Arguments:
+
 iteration #The total number of iterations
 alignmentcsv #Input DNA file (see above)
-pop_parameterscsv# Input population parametrs file (see above)
+pop_parameterscsv# Input population parameters file (see above)
 species# Number of species in the input files
+
+###
 
 Infrapopgenetics <- function(alignmentcsv, pop_parameterscsv, iteration, species) { 
 
@@ -115,13 +126,13 @@ Infrapopgenetics <- function(alignmentcsv, pop_parameterscsv, iteration, species
 
 #Infraglm function
 
-This function calculate a Genearalized linear model over the data generated from the previous simulation (i.e. one per iteration).
-In this example, is wrote for a Gaussian model (link = "identity") accounting for the differences in sample size (weights option over an n column)
+This function calculate a Genearalized linear model over the data generated from the previous simulation (i.e. one model per iteration).
+*In this example, is wrote for a Gaussian model (link = "identity") accounting for the differences in sample size (weights option over an sample size column manually added to the output.csv file)
 
 #Input data
 
 data=read.csv("output.csv") #From the previous function
-*If you are interested in use the weight option of glm, you have to include a column named "n" with the sample size in your data.
+*If you are interested in use the weight option of glm, you have to nclude a column named "n" with the sample size in your data.
 
 #Output data
 
@@ -154,7 +165,7 @@ dev=numeric()
               sub1 = filter(data, V1==it)
               sub=as.data.frame(sub1)
               iteration=c(it,iteration)
-              glm=glm(V3 ~ QUANTILE50, data = sub,  family = gaussian(link = "identity"), weights = n) #PREGUNTAR A ROGER
+              glm=glm(V3 ~ QUANTILE50, data = sub,  family = gaussian(link = "identity"), weights = n) 
               int = coef(glm)[1] 
               intcp= c(intcp,as.numeric(int))
               sl = coef(glm)[2]
