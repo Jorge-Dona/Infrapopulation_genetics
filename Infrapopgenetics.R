@@ -1,7 +1,8 @@
 #################################################Estimating population genetics parameters for infrapopulations#############################################################
 
-This function allow to simulate 100 (or whatever) sampling scenarios. This is a way to use all your data when you have some infrapopulations (i.e. number of symbiont individuals per individual host) better sampled than others, by using one random individual per infrapopulation each time for iteration calculations. Later you will able to compare iteration with general results. An example, you have some infrapopulations with 5 individuals sampled and other with only one. Here, in each iteration, only one individual is used per infrapopulation (always the same for the infrapopulation with one individual). Then, you can use the "Infraglm function" (see below) to calculate Genearalized linear models for over your variables of interest.
-*In some circumstances, can be realistic work with uncertainty in your variables (e.g. abundance). This function allows to calculate a new value into a range per iteration. In this example, Minimum, Median, Quartile 95 and Maximun are simulated between the 50% and the 100% of the "real" value.
+This function allows to simulate 100 (or whatever) sampling scenarios. This is a way to use all your data when you have some infrapopulations (i.e. number of symbiont individuals per individual host) better sampled than others (i.e. more individuals sampled in some infrapopulations than in others). This works by using one random individual per infrapopulation for each iteration calculations and then statistically comparing all the iterations (with a different function, see below infraglm function ). 
+
+*In some circumstances, can be realistic work with some uncertainty in your variables (e.g. abundance). This function allows to calculate a new value into a range, per iteration (in this example, Minimum, Median, Quartile 95 and Maximun are simulated between the 50% and the 100% of the "real" value).
 
 
 #Preparing data
@@ -16,13 +17,14 @@ The alignmentcsv (DNA sequences as characters) and the pop_parameterscsv (Popula
 
 The output.csv includes the results for 100 iterations.
 
-In this example:
+#In this example:
 
 Genetic parameters estimated: Tajimas D, R2, nucleotide diversity (pi), haplotype number and haplotype proportion.
 Population parameters simulated: Minimum, Median, Quartile 95 and Maximun.
 
 In addition, sequencesused.csv include all the sequences used in the simulation.
 
+#
 
 ###################################################################################################################
 
